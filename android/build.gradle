@@ -5,6 +5,10 @@ ext {
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.3.0'
 }
 
+apply plugin: 'kotlin-android-extensions'
+
+
+
 buildscript {
     repositories {
         google()
@@ -55,4 +59,8 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
+    implementation "androidx.camera:camera-camera2"
+    implementation "androidx.camera:camera-lifecycle"
+    implementation "androidx.camera:camera-view:1.0.0-alpha18"
 }
