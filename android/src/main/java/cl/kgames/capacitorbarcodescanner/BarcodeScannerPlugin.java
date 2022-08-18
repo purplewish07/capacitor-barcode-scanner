@@ -9,14 +9,12 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 @CapacitorPlugin(name = "BarcodeScanner")
 public class BarcodeScannerPlugin extends Plugin {
 
-    private BarcodeScanner implementation = new BarcodeScanner();
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
+    public void scan(PluginCall call) {
+        JSObject result = new JSObject();
+        result.put("value","123123");
+        result.put("result",true);
+        call.resolve(result);
     }
 }
