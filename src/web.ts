@@ -6,7 +6,7 @@ export class BarcodeScannerWeb extends WebPlugin implements BarcodeScannerPlugin
   async scan():Promise<ScanResult>{
     let result = window.prompt('Leer', undefined);
     if(result){
-      return {result:true,value:result};
+      return {result:true,code:result};
     }else{
       return {result:false};
     }

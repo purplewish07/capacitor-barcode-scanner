@@ -153,7 +153,6 @@ class ScannerActivity : AppCompatActivity() {
             .setTargetRotation(previewView!!.display.rotation)
             .build()
 
-        // Initialize our background executor
         val cameraExecutor = Executors.newSingleThreadExecutor()
 
         analysisUseCase?.setAnalyzer(
@@ -194,9 +193,6 @@ class ScannerActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Log.e(TAG, it.message ?: it.toString())
             }.addOnCompleteListener {
-                // When the image is from CameraX analysis use case, must call image.close() on received
-                // images when finished using them. Otherwise, new images may not be received or the camera
-                // may stall.
                 imageProxy.close()
             }
     }
@@ -205,7 +201,6 @@ class ScannerActivity : AppCompatActivity() {
 
     private val screenAspectRatio: Int
         get() {
-            // Get screen metrics used to setup camera for full screen resolution
             val metrics = DisplayMetrics()
             return aspectRatio(metrics.widthPixels, metrics.heightPixels)
         }

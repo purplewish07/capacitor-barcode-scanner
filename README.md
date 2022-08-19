@@ -27,6 +27,9 @@ npx cap sync
 scan() => Promise<ScanResult>
 ```
 
+Start scan screen
+This promise will fail if permission for camera is denied
+
 **Returns:** <code>Promise&lt;<a href="#scanresult">ScanResult</a>&gt;</code>
 
 --------------------
@@ -37,9 +40,11 @@ scan() => Promise<ScanResult>
 
 #### ScanResult
 
-| Prop         | Type                 |
-| ------------ | -------------------- |
-| **`result`** | <code>boolean</code> |
-| **`value`**  | <code>string</code>  |
+Represents a Scan Result
+
+| Prop         | Type                 | Description                                   |
+| ------------ | -------------------- | --------------------------------------------- |
+| **`result`** | <code>boolean</code> | sucess status, its true when scanner got code |
+| **`code`**   | <code>string</code>  | scanned code                                  |
 
 </docgen-api>
