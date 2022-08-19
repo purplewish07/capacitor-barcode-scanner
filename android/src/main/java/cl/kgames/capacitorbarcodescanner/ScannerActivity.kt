@@ -22,7 +22,9 @@ import com.google.mlkit.vision.common.InputImage
 import java.lang.Math.*
 import java.util.concurrent.Executors
 import android.content.Intent
-import androidx.fragment.app.FragmentActivity
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 
 
 class ScannerActivity : AppCompatActivity() {
@@ -40,6 +42,10 @@ class ScannerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
         setupCamera()
+        val aniSlide: Animation =
+            AnimationUtils.loadAnimation(this@ScannerActivity, R.anim.scanner_animation)
+        var barLine: View = findViewById(R.id.barcode_line)
+        barLine.startAnimation(aniSlide)
     }
 
 
@@ -47,8 +53,12 @@ class ScannerActivity : AppCompatActivity() {
         val data = Intent()
         data.putExtra("code", resultCode)
         setResult(RESULT_OK, data)
-
         super.finish()
+    }
+
+    private fun closeActivity(value:String){
+        resultCode = value;
+        finish()
     }
 
 
@@ -59,9 +69,9 @@ class ScannerActivity : AppCompatActivity() {
     ) {
         if (requestCode == PERMISSION_CAMERA_REQUEST) {
             if (isCameraPermissionGranted()) {
-                // start camera
+                bindCameraUseCases()
             } else {
-                Log.e(TAG, "no camera permission")
+                closeActivity("")
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -128,11 +138,7 @@ class ScannerActivity : AppCompatActivity() {
     }
 
     private fun bindAnalyseUseCase() {
-        // Note that if you know which format of barcode your app is dealing with, detection will be
-        // faster to specify the supported barcode formats one by one, e.g.
-        // BarcodeScannerOptions.Builder()
-        //     .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-        //     .build();
+
         val barcodeScanner: BarcodeScanner = BarcodeScanning.getClient()
 
         if (cameraProvider == null) {
@@ -182,8 +188,7 @@ class ScannerActivity : AppCompatActivity() {
             .addOnSuccessListener { barcodes ->
                 if(barcodes.size > 0){
                     var code = barcodes[0]
-                    resultCode = code.rawValue!!
-                    finish()
+                    closeActivity(code.rawValue!!)
                 }
             }
             .addOnFailureListener {
@@ -195,6 +200,8 @@ class ScannerActivity : AppCompatActivity() {
                 imageProxy.close()
             }
     }
+
+
 
     private val screenAspectRatio: Int
         get() {
