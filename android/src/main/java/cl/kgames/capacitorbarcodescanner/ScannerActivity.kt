@@ -25,6 +25,8 @@ import android.content.Intent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import com.google.mlkit.vision.barcode.Barcode
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 
 
 class ScannerActivity : AppCompatActivity() {
@@ -139,7 +141,14 @@ class ScannerActivity : AppCompatActivity() {
 
     private fun bindAnalyseUseCase() {
 
-        val barcodeScanner: BarcodeScanner = BarcodeScanning.getClient()
+        val options = BarcodeScannerOptions.Builder()
+                .setBarcodeFormats(
+                        Barcode.FORMAT_QR_CODE,
+                        Barcode.FORMAT_CODE_128)
+                .build()
+
+        val barcodeScanner: BarcodeScanner = BarcodeScanning.getClient(options)
+
 
         if (cameraProvider == null) {
             return

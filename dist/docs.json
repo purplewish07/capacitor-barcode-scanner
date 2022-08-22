@@ -1,0 +1,51 @@
+{
+  "api": {
+    "name": "BarcodeScannerPlugin",
+    "slug": "barcodescannerplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "scan",
+        "signature": "() => Promise<ScanResult>",
+        "parameters": [],
+        "returns": "Promise<ScanResult>",
+        "tags": [],
+        "docs": "Start scan screen\nThis promise will fail if permission for camera is denied",
+        "complexTypes": [
+          "ScanResult"
+        ],
+        "slug": "scan"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "ScanResult",
+      "slug": "scanresult",
+      "docs": "Represents a Scan Result",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "result",
+          "tags": [],
+          "docs": "sucess status, its true when scanner got code",
+          "complexTypes": [],
+          "type": "boolean"
+        },
+        {
+          "name": "code",
+          "tags": [],
+          "docs": "scanned code",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}

@@ -1,18 +1,42 @@
 import Foundation
 import Capacitor
+import AVFoundation
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
+
 @objc(BarcodeScannerPlugin)
-public class BarcodeScannerPlugin: CAPPlugin {
-    private let implementation = BarcodeScanner()
+public class BarcodeScannerPlugin: CAPPlugin, BarcodeScannerDelegate {
+    
+    var call: CAPPluginCall?
+    var barcodeScanner: BarcodeScannerViewController?
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    @objc func scan(_ call: CAPPluginCall) {
+        call.keepAlive = true
+        self.call = call
+        
+        if let isSim = bridge?.isSimEnvironment, isSim || !UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+          call.reject("Camera not available while running in Simulator")
+          return
+        }
+        
+        DispatchQueue.main.async {
+            self.barcodeScanner = BarcodeScannerViewController()
+            self.barcodeScanner!.delegate = self;
+         }
+        
+        AVCaptureDevice.requestAccess(for: .video) { granted in
+            if granted {
+              DispatchQueue.main.async {
+
+                self.bridge?.viewController?.present(self.barcodeScanner!, animated: true, completion: nil)
+                
+              }
+            } else {
+                call.reject("User denied access to camera")
+            }
+        }
+    }
+    
+    func didFoundCode(code: String) {
+        self.call?.resolve(["result":true,"code": code]);
     }
 }
