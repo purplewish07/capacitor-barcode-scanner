@@ -36,6 +36,10 @@ public class BarcodeScannerPlugin: CAPPlugin, BarcodeScannerDelegate {
         }
     }
     
+    func didCancelled(){
+        self.call?.resolve(["result":false]);
+    }
+    
     func didFoundCode(code: String) {
         self.call?.resolve(["result":true,"code": code]);
     }
