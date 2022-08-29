@@ -120,7 +120,7 @@ class ScannerActivity : AppCompatActivity() {
 
         previewUseCase = Preview.Builder()
             .setTargetAspectRatio(screenAspectRatio)
-            .setTargetRotation(previewView!!.display.rotation)
+            .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation())
             .build()
         previewUseCase!!.setSurfaceProvider(previewView!!.createSurfaceProvider())
 
@@ -159,7 +159,7 @@ class ScannerActivity : AppCompatActivity() {
 
         analysisUseCase = ImageAnalysis.Builder()
             .setTargetAspectRatio(screenAspectRatio)
-            .setTargetRotation(previewView!!.display.rotation)
+            .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation())
             .build()
 
         val cameraExecutor = Executors.newSingleThreadExecutor()
