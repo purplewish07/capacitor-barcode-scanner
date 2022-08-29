@@ -9,4 +9,6 @@ import Foundation
 
 protocol BarcodeScannerDelegate: AnyObject {
     func didFoundCode(code: String)
+    
+    func didCancelled()
 }

@@ -109,6 +109,10 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
             captureSession.stopRunning()
         }
     }
+    
+    override func viewDidDisappear(_ animated: Bool){
+        delegate?.didCancelled()
+    }
 
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         captureSession.stopRunning()
@@ -128,7 +132,7 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
     }
 
     override var prefersStatusBarHidden: Bool {
-        return true
+        return false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
