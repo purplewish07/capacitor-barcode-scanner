@@ -7,7 +7,7 @@ Uses Google MLKit in android, and AVFoundation on iOS
 ## Install
 
 ```bash
-npm install capacitor-barcode-scanner
+npm install https://github.com/RuedaDeRepuesto/capacitor-barcode-scanner
 npx cap sync
 ```
 
