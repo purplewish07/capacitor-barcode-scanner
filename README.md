@@ -4,7 +4,7 @@ Simple Barcode scanner for capacitor, shows popup camera view to scan.
 Supports code 128 and QR
 Uses Google MLKit in android, and AVFoundation on iOS
 
-version 1.0.0 updated for capacitor 5
+version 1.0.1 updated for capacitor 5
 ## Install
 
 ```bash
