@@ -6,6 +6,13 @@ export interface BarcodeScannerPlugin {
    * This promise will fail if permission for camera is denied
    */
   scan():Promise<ScanResult>;
+
+
+  /**
+   * Start scan screen
+   * the difference vs scan is this will not close automatically, and continues scannning multiple codes
+   */
+  multiScan():Promise<MultiScanResult>;
 }
 
 /**
@@ -20,4 +27,13 @@ export interface ScanResult{
    * scanned code
    */
   code?:string;
+}
+
+/**
+ * Represents a Multiple scan result
+ */
+export interface MultiScanResult{
+  result:boolean;
+  count:number;
+  codes:string[]
 }

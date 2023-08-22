@@ -1,6 +1,6 @@
 {
   "name": "capacitor-barcode-scanner",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "barcode scanner for capacitor 5",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -25,7 +25,13 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "scanner",
+    "barcode",
+    "128",
+    "qr",
+    "mlkit",
+    "avfoundation"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

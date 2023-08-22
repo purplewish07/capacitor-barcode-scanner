@@ -19,6 +19,7 @@ In XCode -> App info.plist add key NSCameraUsageDescription
 <docgen-index>
 
 * [`scan()`](#scan)
+* [`multiScan()`](#multiscan)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -40,6 +41,20 @@ This promise will fail if permission for camera is denied
 --------------------
 
 
+### multiScan()
+
+```typescript
+multiScan() => Promise<MultiScanResult>
+```
+
+Start scan screen
+the difference vs scan is this will not close automatically, and continues scannning multiple codes
+
+**Returns:** <code>Promise&lt;<a href="#multiscanresult">MultiScanResult</a>&gt;</code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -51,5 +66,16 @@ Represents a Scan Result
 | ------------ | -------------------- | --------------------------------------------- |
 | **`result`** | <code>boolean</code> | sucess status, its true when scanner got code |
 | **`code`**   | <code>string</code>  | scanned code                                  |
+
+
+#### MultiScanResult
+
+Represents a Multiple scan result
+
+| Prop         | Type                  |
+| ------------ | --------------------- |
+| **`result`** | <code>boolean</code>  |
+| **`count`**  | <code>number</code>   |
+| **`codes`**  | <code>string[]</code> |
 
 </docgen-api>
