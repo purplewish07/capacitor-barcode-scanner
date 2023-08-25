@@ -18,7 +18,7 @@ npx cap sync
 |----------------|-------------------|
 | 0.0.2          | Capacitor 3       |
 | 1.0.1          | Capacitor 5       |
-| 1.1.1          | Capacitor 5       |
+| 2.0.0          | Capacitor 5       |
 
 #### iOS
 In XCode -> App info.plist add key NSCameraUsageDescription
