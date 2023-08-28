@@ -90,22 +90,27 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
             button.addTarget(self, action: #selector(exitBtnTap), for: .touchUpInside)
             view.addSubview(button)
             
-            if let podBundle = Bundle(identifier: "org.cocoapods.CapacitorBarcodeScanner"){
-                if let imgSrc = UIImage(named: "scan",in: podBundle, compatibleWith: nil){
-                    let imageView = UIImageView(image: imgSrc)
-                    imageView.frame = CGRect(x: view.bounds.width - 90 - 16, y: view.bounds.height - 90 - 90, width: 90, height: 90)
-                    imageView.contentMode = .scaleAspectFit
-                    view.addSubview(imageView)
-                    
-                    let label = UILabel(frame: imageView.bounds)
-                    label.text = "0"
-                    label.textColor = .white
-                    label.font = UIFont.systemFont(ofSize: 48)
-                    label.textAlignment = .center
-                    imageView.addSubview(label)
-                    codeCount = label
-                }
+            let bundle = Bundle(for: BarcodeScannerPlugin.self)
+            let bundleURL = bundle.bundleURL.appendingPathComponent("CapacitorBarcodeScanner.bundle")
+            let resourceBundle = Bundle(url: bundleURL)
+            
+            if let imgSrc = UIImage(named:"scan", in:resourceBundle, compatibleWith: nil){
+                let imageView = UIImageView(image: imgSrc)
+                imageView.frame = CGRect(x: view.bounds.width - 90 - 16, y: view.bounds.height - 90 - 90, width: 90, height: 90)
+                imageView.contentMode = .scaleAspectFit
+                view.addSubview(imageView)
+                
+                let label = UILabel(frame: imageView.bounds)
+                label.text = "0"
+                label.textColor = .white
+                label.font = UIFont.systemFont(ofSize: 48)
+                label.textAlignment = .center
+                imageView.addSubview(label)
+                codeCount = label
+            }else{
+                print("*** No se encontró la imagen scan")
             }
+            
             
         }
 
@@ -253,3 +258,4 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
         return .all
     }
 }
+
