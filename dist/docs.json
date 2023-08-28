@@ -11,7 +11,7 @@
         "parameters": [],
         "returns": "Promise<ScanResult>",
         "tags": [],
-        "docs": "Start scan screen\r\nThis promise will fail if permission for camera is denied",
+        "docs": "Start scan screen\nThis promise will fail if permission for camera is denied",
         "complexTypes": [
           "ScanResult"
         ],
@@ -29,7 +29,7 @@
         ],
         "returns": "Promise<MultiScanResult>",
         "tags": [],
-        "docs": "Start scan screen\r\nthe difference vs scan is this will not close automatically, and continues scannning multiple codes\r\n! Added in v1.1.1",
+        "docs": "Start scan screen\nthe difference vs scan is this will not close automatically, and continues scannning multiple codes\n! Added in v1.1.1",
         "complexTypes": [
           "MultiScanResult",
           "MultiScanOptions"
