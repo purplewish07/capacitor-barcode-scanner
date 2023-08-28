@@ -50,6 +50,7 @@ class ScannerActivity : AppCompatActivity() {
     private var resultCodes: Array<String> = arrayOf()
     private var multiScan:Boolean = false;
     private var codesCounter: TextView? = null
+    private var maxScans:Int = 9999
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +68,9 @@ class ScannerActivity : AppCompatActivity() {
             if (valor != null) {
                 multiScan = valor
             }
+
+            val maxReadsArg = intent.getIntExtra("maxScans",9999)
+            maxScans = maxReadsArg
         }
         val imageButton: ImageButton = findViewById(R.id.btn_ok)
         codesCounter = findViewById(R.id.codes_counter)
@@ -243,6 +247,10 @@ class ScannerActivity : AppCompatActivity() {
                                 popReaded(codeValue)
                                 resultCodes+=codeValue
                                 codesCounter!!.text = resultCodes.count().toString()
+
+                                if(resultCodes.size >= maxScans){
+                                    closeActivity(codeValue)
+                                }
                             }
                         }
                     }

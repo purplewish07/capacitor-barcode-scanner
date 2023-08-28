@@ -19,12 +19,12 @@
       },
       {
         "name": "multiScan",
-        "signature": "(opts: MultiScanOptions) => Promise<MultiScanResult>",
+        "signature": "(opts?: MultiScanOptions | undefined) => Promise<MultiScanResult>",
         "parameters": [
           {
             "name": "opts",
             "docs": "",
-            "type": "MultiScanOptions"
+            "type": "MultiScanOptions | undefined"
           }
         ],
         "returns": "Promise<MultiScanResult>",

@@ -53,7 +53,7 @@ This promise will fail if permission for camera is denied
 ### multiScan(...)
 
 ```typescript
-multiScan(opts: MultiScanOptions) => Promise<MultiScanResult>
+multiScan(opts?: MultiScanOptions | undefined) => Promise<MultiScanResult>
 ```
 
 Start scan screen

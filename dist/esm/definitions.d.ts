@@ -9,7 +9,7 @@ export interface BarcodeScannerPlugin {
      * the difference vs scan is this will not close automatically, and continues scannning multiple codes
      * ! Added in v1.1.1
      */
-    multiScan(opts: MultiScanOptions): Promise<MultiScanResult>;
+    multiScan(opts?: MultiScanOptions): Promise<MultiScanResult>;
 }
 /**
  * Represents a Scan Result

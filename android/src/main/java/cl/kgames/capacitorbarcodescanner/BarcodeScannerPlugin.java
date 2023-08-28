@@ -47,6 +47,10 @@ public class BarcodeScannerPlugin extends Plugin {
     private void showScanner(PluginCall call, boolean multi){
         Intent intent = new Intent(getContext(),ScannerActivity.class);
         intent.putExtra("multi",multi);
+        if(multi){
+            int maxReads = call.getInt("maxScans",9999);
+            intent.putExtra("maxScans",maxReads);
+        }
         startActivityForResult(call,intent,"onScan");
     }
 
