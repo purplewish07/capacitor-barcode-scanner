@@ -10,6 +10,14 @@ public class BarcodeScannerPlugin: CAPPlugin, BarcodeScannerDelegate {
     var barcodeScanner: BarcodeScannerViewController?
 
     @objc func scan(_ call: CAPPluginCall) {
+        showScanner(call: call,multi: false)
+    }
+    
+    @objc func multiScan(_ call:CAPPluginCall){
+        showScanner(call: call,multi: true)
+    }
+    
+    func showScanner(call: CAPPluginCall,multi:Bool = false){
         call.keepAlive = true
         self.call = call
         
@@ -19,8 +27,10 @@ public class BarcodeScannerPlugin: CAPPlugin, BarcodeScannerDelegate {
         }
         
         DispatchQueue.main.async {
-            self.barcodeScanner = BarcodeScannerViewController()
+            self.barcodeScanner = BarcodeScannerViewController(multi: multi)
             self.barcodeScanner!.delegate = self;
+            let maxScans = call.getInt("maxScans", 9999)
+            self.barcodeScanner!.maxScans = maxScans
          }
         
         AVCaptureDevice.requestAccess(for: .video) { granted in
@@ -36,11 +46,23 @@ public class BarcodeScannerPlugin: CAPPlugin, BarcodeScannerDelegate {
         }
     }
     
+    
     func didCancelled(){
         self.call?.resolve(["result":false]);
     }
     
     func didFoundCode(code: String) {
         self.call?.resolve(["result":true,"code": code]);
+    }
+    
+    func didFoundCodes(codes: [String]) {
+        
+        let result = codes.count > 0 ? true:false
+        
+        self.call?.resolve([
+            "result":result,
+            "codes": codes,
+            "count":codes.count
+        ]);
     }
 }
