@@ -8,6 +8,7 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
     var multiScan: Bool = false
     var codes:[String] = []
     var codeCount: UILabel?
+    var maxScans = 9999
     
     weak var delegate: BarcodeScannerDelegate?
 
@@ -215,6 +216,9 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
                     showToast(message: stringValue)
                     if let labelcodeCount = codeCount{
                         labelcodeCount.text = codes.count.description
+                    }
+                    if(codes.count >= maxScans){
+                        exitBtnTap()
                     }
                 }
                 

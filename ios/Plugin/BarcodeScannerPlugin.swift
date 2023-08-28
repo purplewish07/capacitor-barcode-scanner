@@ -29,6 +29,8 @@ public class BarcodeScannerPlugin: CAPPlugin, BarcodeScannerDelegate {
         DispatchQueue.main.async {
             self.barcodeScanner = BarcodeScannerViewController(multi: multi)
             self.barcodeScanner!.delegate = self;
+            let maxScans = call.getInt("maxScans", 9999)
+            self.barcodeScanner!.maxScans = maxScans
          }
         
         AVCaptureDevice.requestAccess(for: .video) { granted in
