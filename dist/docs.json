@@ -11,7 +11,7 @@
         "parameters": [],
         "returns": "Promise<ScanResult>",
         "tags": [],
-        "docs": "Start scan screen\nThis promise will fail if permission for camera is denied",
+        "docs": "Start scan screen\r\nThis promise will fail if permission for camera is denied",
         "complexTypes": [
           "ScanResult"
         ],
@@ -19,13 +19,20 @@
       },
       {
         "name": "multiScan",
-        "signature": "() => Promise<MultiScanResult>",
-        "parameters": [],
+        "signature": "(opts: MultiScanOptions) => Promise<MultiScanResult>",
+        "parameters": [
+          {
+            "name": "opts",
+            "docs": "",
+            "type": "MultiScanOptions"
+          }
+        ],
         "returns": "Promise<MultiScanResult>",
         "tags": [],
-        "docs": "Start scan screen\nthe difference vs scan is this will not close automatically, and continues scannning multiple codes\n! Added in v1.1.1",
+        "docs": "Start scan screen\r\nthe difference vs scan is this will not close automatically, and continues scannning multiple codes\r\n! Added in v1.1.1",
         "complexTypes": [
-          "MultiScanResult"
+          "MultiScanResult",
+          "MultiScanOptions"
         ],
         "slug": "multiscan"
       }
@@ -83,6 +90,22 @@
           "docs": "",
           "complexTypes": [],
           "type": "string[]"
+        }
+      ]
+    },
+    {
+      "name": "MultiScanOptions",
+      "slug": "multiscanoptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "maxScans",
+          "tags": [],
+          "docs": "Max quantity of codes to scan, when reached the amount activity or viewcontroller will close and return the scanned codes, it defaults to 9999",
+          "complexTypes": [],
+          "type": "number | undefined"
         }
       ]
     }

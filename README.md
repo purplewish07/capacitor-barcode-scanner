@@ -28,7 +28,7 @@ In XCode -> App info.plist add key NSCameraUsageDescription
 <docgen-index>
 
 * [`scan()`](#scan)
-* [`multiScan()`](#multiscan)
+* [`multiScan(...)`](#multiscan)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -50,15 +50,19 @@ This promise will fail if permission for camera is denied
 --------------------
 
 
-### multiScan()
+### multiScan(...)
 
 ```typescript
-multiScan() => Promise<MultiScanResult>
+multiScan(opts: MultiScanOptions) => Promise<MultiScanResult>
 ```
 
 Start scan screen
 the difference vs scan is this will not close automatically, and continues scannning multiple codes
 ! Added in v1.1.1
+
+| Param      | Type                                                          |
+| ---------- | ------------------------------------------------------------- |
+| **`opts`** | <code><a href="#multiscanoptions">MultiScanOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#multiscanresult">MultiScanResult</a>&gt;</code>
 
@@ -87,5 +91,12 @@ Represents a Multiple scan result
 | **`result`** | <code>boolean</code>  |
 | **`count`**  | <code>number</code>   |
 | **`codes`**  | <code>string[]</code> |
+
+
+#### MultiScanOptions
+
+| Prop           | Type                | Description                                                                                                                                    |
+| -------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`maxScans`** | <code>number</code> | Max quantity of codes to scan, when reached the amount activity or viewcontroller will close and return the scanned codes, it defaults to 9999 |
 
 </docgen-api>
