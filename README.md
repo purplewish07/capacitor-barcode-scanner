@@ -11,6 +11,15 @@ version 1.0.1 updated for capacitor 5
 npm i capacitor-barcode-scanner
 npx cap sync
 ```
+
+### Capacitor Compatibility
+
+| Plugin Version | Capacitor Version |
+|----------------|-------------------|
+| 0.0.2          | Capacitor 3       |
+| 1.0.1          | Capacitor 5       |
+| 2.0.0          | Capacitor 5       |
+
 #### iOS
 In XCode -> App info.plist add key NSCameraUsageDescription
 
@@ -49,6 +58,7 @@ multiScan() => Promise<MultiScanResult>
 
 Start scan screen
 the difference vs scan is this will not close automatically, and continues scannning multiple codes
+! Added in v1.1.1
 
 **Returns:** <code>Promise&lt;<a href="#multiscanresult">MultiScanResult</a>&gt;</code>
 
