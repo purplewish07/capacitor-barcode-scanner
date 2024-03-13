@@ -5,6 +5,7 @@ Supports code 128 and QR
 Uses Google MLKit in android, and AVFoundation on iOS
 
 version 1.0.1 updated for capacitor 5
+version 2.1.2 updated MLKit version in android
 ## Install
 
 ```bash
@@ -19,6 +20,8 @@ npx cap sync
 | 0.0.2          | Capacitor 3       |
 | 1.0.1          | Capacitor 5       |
 | 2.0.0          | Capacitor 5       |
+| 2.1.1          | Capacitor 5       |
+| 2.1.2          | Capacitor 5       |
 
 #### iOS
 In XCode -> App info.plist add key NSCameraUsageDescription
