@@ -2,39 +2,31 @@ package cl.kgames.capacitorbarcodescanner
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.Activity
 import android.content.pm.PackageManager
-import android.media.AudioManager
-import android.media.ToneGenerator
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import android.view.Window
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.button.MaterialButton
-import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.lang.Math.*
 import java.util.concurrent.Executors
+import android.content.Intent
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import com.google.mlkit.vision.barcode.Barcode
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 
 
 class ScannerActivity : AppCompatActivity() {
@@ -47,11 +39,6 @@ class ScannerActivity : AppCompatActivity() {
     private var analysisUseCase: ImageAnalysis? = null
 
     private var resultCode:String = ""
-    private var resultCodes: Array<String> = arrayOf()
-    private var multiScan:Boolean = false;
-    private var codesCounter: TextView? = null
-    private var maxScans:Int = 9999
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,41 +48,12 @@ class ScannerActivity : AppCompatActivity() {
             AnimationUtils.loadAnimation(this@ScannerActivity, R.anim.scanner_animation)
         var barLine: View = findViewById(R.id.barcode_line)
         barLine.startAnimation(aniSlide)
-
-        val intent = intent
-        if (intent != null) {
-            val valor = intent.getBooleanExtra("multi",false)
-            if (valor != null) {
-                multiScan = valor
-            }
-
-            val maxReadsArg = intent.getIntExtra("maxScans",9999)
-            maxScans = maxReadsArg
-        }
-        val imageButton: ImageButton = findViewById(R.id.btn_ok)
-        codesCounter = findViewById(R.id.codes_counter)
-
-        imageButton.setOnClickListener{
-            closeActivity("")
-        }
-        if(multiScan){
-            imageButton.visibility = View.VISIBLE
-            codesCounter?.visibility = View.VISIBLE
-        }
     }
 
 
     override fun finish() {
         val data = Intent()
-
-        if(!multiScan){
-            data.putExtra("code", resultCode)
-
-        }else{
-            data.putExtra("codes",resultCodes);
-            data.putExtra("multi",true)
-        }
-
+        data.putExtra("code", resultCode)
         setResult(RESULT_OK, data)
         super.finish()
     }
@@ -237,23 +195,8 @@ class ScannerActivity : AppCompatActivity() {
         barcodeScanner.process(inputImage)
             .addOnSuccessListener { barcodes ->
                 if(barcodes.size > 0){
-                    if(!multiScan){
-                        var code = barcodes[0]
-                        closeActivity(code.rawValue!!)
-                    }else{
-                        for (i in barcodes){
-                            var codeValue = i.rawValue!!
-                            if(!resultCodes.contains(codeValue)){
-                                popReaded(codeValue)
-                                resultCodes+=codeValue
-                                codesCounter!!.text = resultCodes.count().toString()
-
-                                if(resultCodes.size >= maxScans){
-                                    closeActivity(codeValue)
-                                }
-                            }
-                        }
-                    }
+                    var code = barcodes[0]
+                    closeActivity(code.rawValue!!)
                 }
             }
             .addOnFailureListener {
@@ -264,9 +207,6 @@ class ScannerActivity : AppCompatActivity() {
     }
 
 
-    private fun popReaded(value:String){
-        Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
-    }
 
     private val screenAspectRatio: Int
         get() {

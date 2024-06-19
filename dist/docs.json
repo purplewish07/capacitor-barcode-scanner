@@ -16,25 +16,6 @@
           "ScanResult"
         ],
         "slug": "scan"
-      },
-      {
-        "name": "multiScan",
-        "signature": "(opts?: MultiScanOptions | undefined) => Promise<MultiScanResult>",
-        "parameters": [
-          {
-            "name": "opts",
-            "docs": "",
-            "type": "MultiScanOptions | undefined"
-          }
-        ],
-        "returns": "Promise<MultiScanResult>",
-        "tags": [],
-        "docs": "Start scan screen\nthe difference vs scan is this will not close automatically, and continues scannning multiple codes\n! Added in v1.1.1",
-        "complexTypes": [
-          "MultiScanResult",
-          "MultiScanOptions"
-        ],
-        "slug": "multiscan"
       }
     ],
     "properties": []
@@ -60,52 +41,6 @@
           "docs": "scanned code",
           "complexTypes": [],
           "type": "string | undefined"
-        }
-      ]
-    },
-    {
-      "name": "MultiScanResult",
-      "slug": "multiscanresult",
-      "docs": "Represents a Multiple scan result",
-      "tags": [],
-      "methods": [],
-      "properties": [
-        {
-          "name": "result",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "boolean"
-        },
-        {
-          "name": "count",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "number"
-        },
-        {
-          "name": "codes",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "string[]"
-        }
-      ]
-    },
-    {
-      "name": "MultiScanOptions",
-      "slug": "multiscanoptions",
-      "docs": "",
-      "tags": [],
-      "methods": [],
-      "properties": [
-        {
-          "name": "maxScans",
-          "tags": [],
-          "docs": "Max quantity of codes to scan, when reached the amount activity or viewcontroller will close and return the scanned codes, it defaults to 9999",
-          "complexTypes": [],
-          "type": "number | undefined"
         }
       ]
     }

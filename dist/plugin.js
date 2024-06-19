@@ -6,20 +6,6 @@ var capacitorBarcodeScanner = (function (exports, core) {
     });
 
     class BarcodeScannerWeb extends core.WebPlugin {
-        async multiScan() {
-            let result = window.prompt('Leer', undefined);
-            if (result) {
-                return {
-                    result: true,
-                    count: result.split(',').length,
-                    codes: result.split(',')
-                };
-            }
-            else {
-                let codes = [];
-                return { result: false, count: 0, codes: codes };
-            }
-        }
         async scan() {
             let result = window.prompt('Leer', undefined);
             if (result) {

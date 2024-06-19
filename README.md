@@ -1,15 +1,16 @@
 # capacitor-barcode-scanner
 
-Simple Barcode scanner for capacitor, shows popup camera view to scan.
+Simple Barcode scanner for capacitor, featuring an embedded camera view for scanning.
 Supports code 128 and QR
-Uses Google MLKit in android, and AVFoundation on iOS
+Uses Google MLKit in android.
+iOS is not supported yet.
 
-version 1.0.1 updated for capacitor 5
-version 2.1.2 updated MLKit version in android
+This branch base on 0.0.2 for capacitor 3.
+
 ## Install
 
 ```bash
-npm i capacitor-barcode-scanner
+npm install https://github.com/purplewish07/capacitor-barcode-scanner.git
 npx cap sync
 ```
 
@@ -18,10 +19,6 @@ npx cap sync
 | Plugin Version | Capacitor Version |
 |----------------|-------------------|
 | 0.0.2          | Capacitor 3       |
-| 1.0.1          | Capacitor 5       |
-| 2.0.0          | Capacitor 5       |
-| 2.1.1          | Capacitor 5       |
-| 2.1.2          | Capacitor 5       |
 
 #### iOS
 In XCode -> App info.plist add key NSCameraUsageDescription
@@ -31,7 +28,6 @@ In XCode -> App info.plist add key NSCameraUsageDescription
 <docgen-index>
 
 * [`scan()`](#scan)
-* [`multiScan(...)`](#multiscan)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -53,25 +49,6 @@ This promise will fail if permission for camera is denied
 --------------------
 
 
-### multiScan(...)
-
-```typescript
-multiScan(opts?: MultiScanOptions | undefined) => Promise<MultiScanResult>
-```
-
-Start scan screen
-the difference vs scan is this will not close automatically, and continues scannning multiple codes
-! Added in v1.1.1
-
-| Param      | Type                                                          |
-| ---------- | ------------------------------------------------------------- |
-| **`opts`** | <code><a href="#multiscanoptions">MultiScanOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#multiscanresult">MultiScanResult</a>&gt;</code>
-
---------------------
-
-
 ### Interfaces
 
 
@@ -83,23 +60,5 @@ Represents a Scan Result
 | ------------ | -------------------- | --------------------------------------------- |
 | **`result`** | <code>boolean</code> | sucess status, its true when scanner got code |
 | **`code`**   | <code>string</code>  | scanned code                                  |
-
-
-#### MultiScanResult
-
-Represents a Multiple scan result
-
-| Prop         | Type                  |
-| ------------ | --------------------- |
-| **`result`** | <code>boolean</code>  |
-| **`count`**  | <code>number</code>   |
-| **`codes`**  | <code>string[]</code> |
-
-
-#### MultiScanOptions
-
-| Prop           | Type                | Description                                                                                                                                    |
-| -------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`maxScans`** | <code>number</code> | Max quantity of codes to scan, when reached the amount activity or viewcontroller will close and return the scanned codes, it defaults to 9999 |
 
 </docgen-api>

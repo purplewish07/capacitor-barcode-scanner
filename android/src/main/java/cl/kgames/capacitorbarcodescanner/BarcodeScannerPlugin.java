@@ -17,8 +17,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
 
-import org.json.JSONArray;
-
 @CapacitorPlugin(name = "BarcodeScanner",
         permissions = {
                 @Permission(strings = { Manifest.permission.CAMERA }, alias = BarcodeScannerPlugin.CAMERA)
@@ -32,25 +30,13 @@ public class BarcodeScannerPlugin extends Plugin {
 
     @PluginMethod
     public void scan(PluginCall call) {
-        if(checkCameraPermissions(call,false)){
-            showScanner(call,false);
+        if(checkCameraPermissions(call)){
+            showScanner(call);
         }
     }
 
-    @PluginMethod
-    public void multiScan(PluginCall call){
-        if(checkCameraPermissions(call,true)){
-            showScanner(call,true);
-        }
-    }
-
-    private void showScanner(PluginCall call, boolean multi){
+    private void showScanner(PluginCall call){
         Intent intent = new Intent(getContext(),ScannerActivity.class);
-        intent.putExtra("multi",multi);
-        if(multi){
-            int maxReads = call.getInt("maxScans",9999);
-            intent.putExtra("maxScans",maxReads);
-        }
         startActivityForResult(call,intent,"onScan");
     }
 
@@ -61,36 +47,15 @@ public class BarcodeScannerPlugin extends Plugin {
         }
         JSObject json = new JSObject();
 
-        Boolean multiScan = result.getData().getBooleanExtra("multi",false);
-        System.out.println("[BSP] multi: "+multiScan.toString());
         try{
-            if(!multiScan){
-                String code = result.getData().getStringExtra("code");
-                if(code != null && code.length() > 0){
-                    json.put("result",true);
-                    json.put("code",code);
-                    call.resolve(json);
-                }else{
-                    throw new Exception("nothing_readed");
-                }
+            String code = result.getData().getStringExtra("code");
+            if(code != null && code.length() > 0){
+               json.put("result",true);
+               json.put("code",code);
+               call.resolve(json);
             }else{
-                String[] codes = result.getData().getStringArrayExtra("codes");
-                System.out.println("[BSP] codes: ");
-                JSONArray arrayCodes = new JSONArray();
-                for (int i = 0; i < codes.length; i++) {
-                    System.out.println("[BSP] "+i+": "+codes[i]);
-                    arrayCodes.put(codes[i]);
-                }
-                if(codes.length > 0){
-                    json.put("result",true);
-                }else{
-                    json.put("result",false);
-                }
-                json.put("count",codes.length);
-                json.put("codes",arrayCodes);
-                call.resolve(json);
+                throw new Exception("nada leido");
             }
-
         }
         catch(Exception ex){
             json.put("result",false);
@@ -98,16 +63,12 @@ public class BarcodeScannerPlugin extends Plugin {
         }
     }
 
-    private boolean checkCameraPermissions(PluginCall call,boolean multi) {
+    private boolean checkCameraPermissions(PluginCall call) {
         boolean needCameraPerms = isPermissionDeclared(CAMERA);
         boolean hasCameraPerms = !needCameraPerms || getPermissionState(CAMERA) == PermissionState.GRANTED;
 
         if (!hasCameraPerms) {
-            String cbName = "cameraPermissionsCallback";
-            if(multi){
-                cbName = "cameraPermissionsForMultiCallback";
-            }
-            requestPermissionForAlias(CAMERA, call, cbName);
+            requestPermissionForAlias(CAMERA, call, "cameraPermissionsCallback");
             return false;
         }
         return true;
@@ -125,21 +86,6 @@ public class BarcodeScannerPlugin extends Plugin {
             call.reject(PERMISSION_DENIED_ERROR_CAMERA);
             return;
         }
-        showScanner(call,false);
-    }
-
-    /**
-     * Completes the plugin call after a camera permission request
-     *
-     * @param call the plugin call
-     */
-    @PermissionCallback
-    private void cameraPermissionsForMultiCallback(PluginCall call) {
-        if (getPermissionState(CAMERA) != PermissionState.GRANTED) {
-            Logger.debug(getLogTag(), "User denied camera permission: " + getPermissionState(CAMERA).toString());
-            call.reject(PERMISSION_DENIED_ERROR_CAMERA);
-            return;
-        }
-        showScanner(call,true);
+        showScanner(call);
     }
 }

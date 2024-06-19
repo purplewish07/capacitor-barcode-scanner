@@ -5,15 +5,10 @@ import Capacitor
 class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
-    var multiScan: Bool = false
-    var codes:[String] = []
-    var codeCount: UILabel?
-    var maxScans = 9999
     
     weak var delegate: BarcodeScannerDelegate?
 
-    init(multi:Bool) {
-        multiScan = multi
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -23,9 +18,6 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
 
         view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
@@ -50,6 +42,7 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
 
         if (captureSession.canAddOutput(metadataOutput)) {
             captureSession.addOutput(metadataOutput)
+
             metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             metadataOutput.metadataObjectTypes = [.qr,.code128]
         } else {
@@ -62,77 +55,8 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
         previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
-        
-        
-        let redLine = UIView()
-        redLine.backgroundColor = UIColor.red
-        redLine.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 3)
-        view.addSubview(redLine)
-        animateRedLine(redLine: redLine,endY:view.bounds.height - 90 - 120)
-        
-        
 
-        DispatchQueue.global().async {
-            self.captureSession.startRunning()
-        }
-        
-        if(multiScan){
-            
-            let button = UIButton(type: .system)
-            button.setImage(UIImage(systemName: "xmark"), for: .normal)
-            button.tintColor = .white
-            button.backgroundColor = .clear
-            button.frame = CGRect(x: 0, y: 0, width: 90, height: 90)
-            button.center = CGPoint(x: view.bounds.midX, y: view.bounds.height - 90 - 45)
-            button.layer.cornerRadius = button.frame.width / 2
-            button.layer.borderWidth = 8
-            button.layer.borderColor = UIColor.white.cgColor
-            button.addTarget(self, action: #selector(exitBtnTap), for: .touchUpInside)
-            view.addSubview(button)
-            
-            let bundle = Bundle(for: BarcodeScannerPlugin.self)
-            let bundleURL = bundle.bundleURL.appendingPathComponent("CapacitorBarcodeScanner.bundle")
-            let resourceBundle = Bundle(url: bundleURL)
-            
-            if let imgSrc = UIImage(named:"scan", in:resourceBundle, compatibleWith: nil){
-                let imageView = UIImageView(image: imgSrc)
-                imageView.frame = CGRect(x: view.bounds.width - 90 - 16, y: view.bounds.height - 90 - 90, width: 90, height: 90)
-                imageView.contentMode = .scaleAspectFit
-                view.addSubview(imageView)
-                
-                let label = UILabel(frame: imageView.bounds)
-                label.text = "0"
-                label.textColor = .white
-                label.font = UIFont.systemFont(ofSize: 48)
-                label.textAlignment = .center
-                imageView.addSubview(label)
-                codeCount = label
-            }else{
-                print("*** No se encontró la imagen scan")
-            }
-            
-            
-        }
-
-    }
-    
-    
-    @objc func exitBtnTap() {
-        delegate?.didFoundCodes(codes: codes)
-        dismiss(animated: true)
-    }
-    
-    
-    func animateRedLine(redLine:UIView,endY:CGFloat) {
-        UIView.animate(withDuration: 1.0, animations: {
-                redLine.frame.origin.y = endY
-            }) { _ in
-                UIView.animate(withDuration: 1.0) {
-                    redLine.frame.origin.y = 0
-                } completion: { _ in
-                    self.animateRedLine(redLine: redLine, endY: endY)
-                }
-            }
+        captureSession.startRunning()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -174,9 +98,7 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
         super.viewWillAppear(animated)
 
         if (captureSession?.isRunning == false) {
-            DispatchQueue.global().async {
-                self.captureSession.startRunning()
-            }
+            captureSession.startRunning()
         }
     }
 
@@ -189,61 +111,20 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
     }
     
     override func viewDidDisappear(_ animated: Bool){
-        if(multiScan){
-            delegate?.didFoundCodes(codes: codes)
-        }else{
-            delegate?.didCancelled()
-        }
+        delegate?.didCancelled()
     }
 
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        
-        if(!multiScan){
-            captureSession.stopRunning()
+        captureSession.stopRunning()
 
-            if let metadataObject = metadataObjects.first {
-                guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
-                guard let stringValue = readableObject.stringValue else { return }
-                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                showToast(message: stringValue)
-                found(code: stringValue)
-            }
-            dismiss(animated: true)
-            
-        }else{
-            for i in metadataObjects{
-                guard let readableObj = i as? AVMetadataMachineReadableCodeObject else {continue}
-                guard let stringValue = readableObj.stringValue else {continue}
-                
-                if(!codes.contains(stringValue)){
-                    codes.append(stringValue)
-                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    showToast(message: stringValue)
-                    if let labelcodeCount = codeCount{
-                        labelcodeCount.text = codes.count.description
-                    }
-                    if(codes.count >= maxScans){
-                        exitBtnTap()
-                    }
-                }
-                
-            }
+        if let metadataObject = metadataObjects.first {
+            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
+            guard let stringValue = readableObject.stringValue else { return }
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            found(code: stringValue)
         }
-    }
-    
-    
-    func showToast(message: String, duration: TimeInterval = 2.0) {
-        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alertController.view.alpha = 0.6
-        alertController.view.layer.cornerRadius = 15
-        
-        DispatchQueue.main.async {
-            self.present(alertController, animated: true, completion: nil)
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + duration) {
-            alertController.dismiss(animated: true, completion: nil)
-        }
+
+        dismiss(animated: true)
     }
 
     func found(code: String) {
@@ -258,4 +139,3 @@ class BarcodeScannerViewController: UIViewController, AVCaptureMetadataOutputObj
         return .all
     }
 }
-
